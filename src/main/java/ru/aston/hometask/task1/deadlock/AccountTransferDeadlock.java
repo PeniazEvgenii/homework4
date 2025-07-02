@@ -23,26 +23,24 @@ public class AccountTransferDeadlock implements Runnable {
         Lock lockFrom = accountFrom.getLock();
 
         for (int i = 0; i < COUNT_TRANSFERS; i++) {
+            lockFrom.lock();
             try {
-                lockFrom.lock();
                 System.out.printf("[%s] - получил lock %s\n", Thread.currentThread().getName(), accountFrom.getId());
 
+                lockTo.lock();
                 try {
-                    lockTo.lock();
                     System.out.printf("[%s] - получил lock %s\n", Thread.currentThread().getName(), accountTo.getId());
 
                     if (!accountFrom.reduce(transfer)) {
-                        throw new IllegalStateException("Недостаточно средств на балансе " + accountFrom.getId());
+                        System.err.printf("[%s] - Недостаточно средств\n", Thread.currentThread().getName());
+                    } else {
+                        accountTo.add(transfer);
+                        System.out.printf("[%s] - Перевод прошел успешно\n", Thread.currentThread().getName());
                     }
-
-                    accountTo.add(transfer);
-                    System.out.printf("[%s] - Перевод прошел успешно\n", Thread.currentThread().getName());
                 } finally {
                     lockTo.unlock();
                     System.out.printf("[%s] - отпустил lock %s\n", Thread.currentThread().getName(), accountTo.getId());
                 }
-            } catch (IllegalStateException e) {
-                System.err.printf("[%s] - ошибка при переводе перевода: %s\n", Thread.currentThread().getName(), e.getMessage());
             } finally {
                 lockFrom.unlock();
                 System.out.printf("[%s] отпустил lock %s\n", Thread.currentThread().getName(), accountFrom.getId());

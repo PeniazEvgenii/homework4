@@ -23,21 +23,18 @@ public class AccountTransferDeadLockResolved implements Runnable {
         for (int i = 0; i < COUNT_TRANSFERS; i++) {
             getLocks();
             try {
-                System.out.printf("[%s] получил lock обоих аккаунтов\n", Thread.currentThread().getName());
-                if (!accountFrom.reduce(transfer)) {
-                    throw new IllegalStateException("Недостаточно средств на балансе " + accountFrom.getId());
-                }
+                System.out.printf("[%s] - получил lock обоих аккаунтов\n", Thread.currentThread().getName());
+                if (accountFrom.reduce(transfer)) {
                     accountTo.add(transfer);
-                    System.out.printf("Аккаунт %s перевел на аккаунт %s в потоке [%s]\n",
+                    System.out.printf("[%s] - Аккаунт %s перевел на аккаунт %s\n",
+                            Thread.currentThread().getName(),
                             accountFrom.getId(),
-                            accountTo.getId(),
-                            Thread.currentThread().getName());
-            } catch (Exception e) {
-                throw new IllegalStateException("Ошибка при переводе", e);
+                            accountTo.getId());
+                }
             } finally {
                 accountTo.getLock().unlock();
                 accountFrom.getLock().unlock();
-                System.out.printf("[%s] отпустил locks двух аккаунтов\n", Thread.currentThread().getName());
+                System.out.printf("[%s] - отпустил locks двух аккаунтов\n", Thread.currentThread().getName());
             }
         }
     }

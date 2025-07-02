@@ -48,7 +48,6 @@ public class AccountTransferLivelock implements Runnable {
 
                 if (isOtherLock.get()) {
                     System.out.printf("Поток [%s]. Проверяю, что другой поток держит lock и уступаю\n", Thread.currentThread().getName());
-                    // Thread.sleep(100);
                     isLock.set(false);
                     continue;
                 }
