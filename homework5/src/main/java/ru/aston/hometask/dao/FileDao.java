@@ -43,7 +43,7 @@ public class FileDao implements IFileDao {
             preparedStatement.executeUpdate();
             return fileEntity;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Ошибка при сохранении", e);
         }
     }
 
@@ -67,7 +67,7 @@ public class FileDao implements IFileDao {
 
             return Optional.ofNullable(fileEntity);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Ошибка при получении состояния загрузки", e);
         }
     }
 
@@ -82,7 +82,7 @@ public class FileDao implements IFileDao {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Ошибка при обновлении состояния загрузки файла", e);
         }
     }
 }

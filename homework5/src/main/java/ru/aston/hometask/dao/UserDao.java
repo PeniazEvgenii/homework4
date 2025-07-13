@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ru.aston.hometask.connection.api.IConnectionManager;
 import ru.aston.hometask.dao.api.IUserDao;
 import ru.aston.hometask.dao.entity.UserEntity;
+import ru.aston.hometask.exception.DaoException;
 import ru.aston.hometask.service.dto.EGender;
 
 import java.sql.Connection;
@@ -53,7 +54,7 @@ public class UserDao implements IUserDao {
 
             return user;
         } catch (SQLException e) {
-            throw new RuntimeException(e);             // поменять исключение throw new DaoException("Ошибка вставки пользователя " + user.getId(), e);
+            throw new DaoException("Ошибка вставки пользователя " + user.getId(), e);
         }
     }
 
@@ -72,7 +73,7 @@ public class UserDao implements IUserDao {
             }
             return Optional.ofNullable(user);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Ошибка получения пользователя", e);
         }
     }
 
@@ -90,7 +91,7 @@ public class UserDao implements IUserDao {
             }
             return users;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Ошибка получения пользователей", e);
         }
     }
 
@@ -109,7 +110,7 @@ public class UserDao implements IUserDao {
             }
             return Optional.ofNullable(user);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Ошибка получения пользователя с email: " + email, e);
         }
     }
 
@@ -123,7 +124,7 @@ public class UserDao implements IUserDao {
             int countDelete = preparedStatement.executeUpdate();
             return countDelete > 0;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DaoException("Ошибка при удалении пользователя", e);
         }
     }
 

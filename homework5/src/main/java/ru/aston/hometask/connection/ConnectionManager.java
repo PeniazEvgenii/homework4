@@ -8,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionManager implements IConnectionManager {
+    private static final String ERROR_CONNECTION = "Ошибка при получении соединения";
+    private static final String ERROR_LOAD_DRIVER = "Ошибка при загрузке драйвера бд";
     private final ConnectionProperty connectionProperty;
 
     public ConnectionManager(ConnectionProperty connectionProperty) {
@@ -23,7 +25,7 @@ public class ConnectionManager implements IConnectionManager {
                     connectionProperty.getUsername(),
                     connectionProperty.getPassword());
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка при получении соединения", e);
+            throw new RuntimeException(ERROR_CONNECTION, e);
         }
     }
 
@@ -31,7 +33,7 @@ public class ConnectionManager implements IConnectionManager {
         try {
             Class.forName(driver);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Ошибка при загрузке драйвера бд", e);
+            throw new RuntimeException(ERROR_LOAD_DRIVER, e);
         }
     }
 }

@@ -12,6 +12,8 @@ import java.util.concurrent.BlockingQueue;
 
 public class ConnectionManagerProxy implements IConnectionManager {
     private static final int DATABASE_POOL_SIZE = 10;
+    private static final String ERROR_CONNECTION = "Ошибка при получении соединения";
+    private static final String METHOD_CLOSE = "close";
 
     private final IConnectionManager connectionManager;
     private final List<Connection> sourceConnection;
@@ -32,7 +34,7 @@ public class ConnectionManagerProxy implements IConnectionManager {
                     ConnectionManagerProxy.class.getClassLoader(),
                     new Class[]{Connection.class},
                     (proxy, method, args) ->
-                            method.getName().equalsIgnoreCase("close")
+                            method.getName().equalsIgnoreCase(METHOD_CLOSE)
                                     ? connectionPool.add((Connection) proxy)
                                     : method.invoke(connection, args)
             );
@@ -47,7 +49,7 @@ public class ConnectionManagerProxy implements IConnectionManager {
             return connectionPool.take();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Ошибка при получении соединения", e);
+            throw new RuntimeException(ERROR_CONNECTION, e);
         }
     }
 
