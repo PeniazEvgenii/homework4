@@ -1,3 +1,4 @@
+\c shop
 CREATE TABLE app.products
 (
     id bigserial,

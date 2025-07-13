@@ -6,5 +6,3 @@ CREATE DATABASE shop
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False;
 
-CREATE SCHEMA app
-    AUTHORIZATION postgres;

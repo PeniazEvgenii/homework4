@@ -1,3 +1,4 @@
+\c shop
 CREATE TABLE app.files
 (
     id uuid,

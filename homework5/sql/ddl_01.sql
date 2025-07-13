@@ -1,3 +1,8 @@
+\c shop
+
+CREATE SCHEMA app
+    AUTHORIZATION postgres;
+
 CREATE TABLE app.users
 (
     id uuid,

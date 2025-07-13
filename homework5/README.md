@@ -17,3 +17,5 @@
 6. **Strategy** (ru/aston/hometask/service/parser): 
    в `UploadService` выбор папрсера для чтения файлов осуществляется по расширению этого файла (`CSV`, `XLSX`, `JSON`) через `Map<String, IProductParser>`. 
    
+   
+Добавил dockerfile с tomcat и docker-compose для запуска приложения и бд

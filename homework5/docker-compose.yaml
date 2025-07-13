@@ -1,0 +1,34 @@
+name: myapp
+services:
+  app:
+    build: .
+    image: shop:1.0.1
+    environment:
+      DATABASE_URL: jdbc:postgresql://app_db:5432/shop
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: root
+      DATABASE_DRIVER: org.postgresql.Driver
+    networks:
+      - app-network
+    ports:
+      - "8080:8080"
+  app_db:
+    build: sql
+    image: postgresql-app:1.0.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    networks:
+      - app-network
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - 82:80
+    networks:
+      - app-network
+
+networks:
+  app-network:
